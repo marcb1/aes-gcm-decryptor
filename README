@@ -1,0 +1,2 @@
+AES GCM encryptor 
+uses openssl  for encryption/decryption
