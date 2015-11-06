@@ -1,7 +1,7 @@
 RM = rm -fv
 
 
-CPPFLAGS += -ggdb -Wall -std=c++11 -I.
+CPPFLAGS += -ggdb -Wall -std=c++0x -I.
 LIB_FLAGS=-lcrypto -lssl
 
 all: encrypt_main encrypt_lib

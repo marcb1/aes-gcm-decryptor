@@ -17,6 +17,13 @@ int main(int argc, char** argv)
   std::string hashedKey = simpleSHA256(userKey);
   aesEncryptor e(hashedKey);
 
+  //TODO fix this
+  //std::string plain("Marc bassil 123");
+  //std::string cipher;
+ // cipher = e.gcmEncryptString(plain);
+  //std::string decrypted = e.gcmDecryptString(cipher);
+  //std::cout << decrypted << std::endl;
+
   if(op == "-e")
   {
     e.gcmEncryptFile(plaintextFile.c_str(), ciphertextFile.c_str());

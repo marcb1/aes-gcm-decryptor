@@ -33,6 +33,11 @@ class StringStream: public IStream
       return size;
     }
 
+    unsigned int getSize()
+    {
+        return ss.str().size();
+    }
+
     void addString(const std::string& add)
     {
       ss << add;

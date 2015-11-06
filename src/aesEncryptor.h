@@ -16,23 +16,27 @@ class aesEncryptor
 
     ~aesEncryptor();
 
-    int gcmEncryptFile(IStream* cipherStream, IStream* plainStream);
 
     int gcmEncryptFile(const char* plainFile, const char* cipherFile);
 
+    int gcmEncryptString(const std::string& plain, const char* cipherFile);
+
+    // encrypt plain string and return the encrypted result
+    std::string gcmEncryptString(const std::string& plain);
+
+
     int gcmDecryptFile(const char* decryptedFile, const char* cipherFile);
 
-    int gcmDecryptFile(const char* cipherFile, IStream* stream);
+    // decrypt cipherString and place result into plainString
+    std::string gcmDecryptString(const std::string& cipherString);
 
-    int gcmDecryptFile(IStream* cipherStream, IStream* plainStream);
-
-
-    int gcmEncryptString(std::string plain, const char* cipherFile);
 
   private:
+    // reads from plainStream and writes encrypted result into cipherStream
     int gcmEncrypt(IStream* plainStream, unsigned char *key_buf, IStream* cipherStream);
 
-    int gcmDecrypt(int fd, size_t file_len, unsigned char *key_buf, IStream* outStream);
+    // reads from cipherStream and writes decrypted result into plainStream
+    int gcmDecrypt(IStream* cipherStream, unsigned char *key_buf, IStream* plainStream);
 
     unsigned char*        _key;
     const EVP_CIPHER*     _cipher;

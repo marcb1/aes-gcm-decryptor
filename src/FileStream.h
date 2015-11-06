@@ -30,7 +30,8 @@ class FileStream: public IStream
       }
       return true;
     }
-    off_t getSize()
+
+    unsigned int getSize()
     {
       off_t file_len = getFileSize(_fd);
       return file_len;
