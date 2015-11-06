@@ -1,2 +1,6 @@
-AES GCM encryptor 
-uses openssl  for encryption/decryption
+AES GCM encryptor/decryptor
+
+Galois/Cointer mode provides authentication without the need to run a separate HMAC.
+https://en.wikipedia.org/wiki/Galois/Counter_Mode
+
+Uses OpenSSL for encryption/decryption
