@@ -18,11 +18,11 @@ int main(int argc, char** argv)
   aesEncryptor e(hashedKey);
 
   //TODO fix this
-  //std::string plain("Marc bassil 123");
-  //std::string cipher;
- // cipher = e.gcmEncryptString(plain);
-  //std::string decrypted = e.gcmDecryptString(cipher);
-  //std::cout << decrypted << std::endl;
+  std::string plain("Marc bassil 123");
+  std::string cipher;
+  cipher = e.gcmEncryptString(plain);
+  std::string decrypted = e.gcmDecryptString(cipher);
+  std::cout << decrypted << std::endl;
 
   if(op == "-e")
   {
