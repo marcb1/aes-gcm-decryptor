@@ -5,7 +5,8 @@
 aesEncryptor::aesEncryptor(const std::string& key):
     _cipher(EVP_aes_256_gcm())
 {
-    _key = convertStringToChar(key);
+    _key = new unsigned char[s.length()+1];
+    strcpy((char *)key, s.c_str());
 }
 
 aesEncryptor::~aesEncryptor()
