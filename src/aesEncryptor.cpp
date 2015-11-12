@@ -5,8 +5,8 @@
 aesEncryptor::aesEncryptor(const std::string& key):
     _cipher(EVP_aes_256_gcm())
 {
-    _key = new unsigned char[s.length()+1];
-    strcpy((char *)key, s.c_str());
+    _key = new unsigned char[key.length()+1];
+    strcpy((char *)_key, key.c_str());
 }
 
 aesEncryptor::~aesEncryptor()
@@ -201,37 +201,37 @@ std::string aesEncryptor::gcmEncryptString(const std::string& plain)
     return cipherStream.getString();
 }
 
-int aesEncryptor::gcmEncryptString(const std::string& plain, const char* cipherFile)
-{
-    StringStream inStream;
-    inStream.addString(plain);
-
-    FileStream cipherStream;
-    cipherStream.openFile(cipherFile, O_CREAT | O_WRONLY | O_TRUNC);
-
-    int ret = gcmEncrypt(&inStream, _key, &cipherStream);
-    return ret;
-}
-
-int aesEncryptor::gcmEncryptFile(const char* plainFile, const char* cipherFile)
+int aesEncryptor::gcmEncryptFile(const std::string& plainFile, const std::string& cipherFile)
 {
     FileStream inStream;
-    inStream.openFile(plainFile, O_RDONLY);
+    inStream.openFile(plainFile.c_str(), O_RDONLY);
 
     FileStream outStream;
-    outStream.openFile(cipherFile, O_CREAT | O_WRONLY | O_TRUNC);
+    outStream.openFile(cipherFile.c_str(), O_CREAT | O_WRONLY | O_TRUNC);
 
     int ret = gcmEncrypt(&inStream, _key, &outStream);
     return ret;
 }
 
-int aesEncryptor::gcmDecryptFile(const char* plainFile, const char* cipherFile)
+int aesEncryptor::gcmEncryptStringtoFile(const std::string& plainString, const std::string& cipherFile)
+{
+    StringStream inStream;
+    inStream.addString(plainString);
+
+    FileStream outStream;
+    outStream.openFile(cipherFile.c_str(), O_CREAT | O_WRONLY | O_TRUNC);
+
+    int ret = gcmEncrypt(&inStream, _key, &outStream);
+    return ret;
+}
+
+int aesEncryptor::gcmDecryptFile(const std::string& plainFile, const std::string& cipherFile)
 {
     FileStream cipherStream;
-    cipherStream.openFile(cipherFile, O_CREAT | O_RDONLY);
+    cipherStream.openFile(cipherFile.c_str(), O_CREAT | O_RDONLY);
 
     FileStream plainStream;
-    plainStream.openFile(plainFile,  O_CREAT | O_WRONLY | O_TRUNC);
+    plainStream.openFile(plainFile.c_str(),  O_CREAT | O_WRONLY | O_TRUNC);
 
     return gcmDecrypt(&cipherStream, _key, &plainStream);
 }
@@ -249,4 +249,16 @@ std::string aesEncryptor::gcmDecryptString(const std::string& cipherString)
         std::cerr << "Decryption failed..." << std::endl;
     }
     return plainStream.getString();
+}
+
+int aesEncryptor::gcmDecryptFiletoString(const std::string& fileName, std::string& decryptedString)
+{
+    StringStream plainStream;
+
+    FileStream cipherStream;
+    cipherStream.openFile(fileName.c_str(), O_RDONLY);
+
+    int ret = gcmDecrypt(&cipherStream, _key, &plainStream);
+    decryptedString = plainStream.getString();
+    return ret;
 }

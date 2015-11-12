@@ -16,16 +16,22 @@ class aesEncryptor
 
     ~aesEncryptor();
 
+    // read fileName, encrypt it and write result to cipherFile
+    int gcmEncryptFile(const std::string& plainFile, const std::string& cipherFile);
 
-    int gcmEncryptFile(const char* plainFile, const char* cipherFile);
-
-    int gcmEncryptString(const std::string& plain, const char* cipherFile);
-
-    // encrypt plain string and return the encrypted result
+    // encrypt plain string and return the encrypted result as a string
     std::string gcmEncryptString(const std::string& plain);
 
+    // read plain String, encrypt it and write result to cipher file
+    int gcmEncryptStringtoFile(const std::string& plainString, const std::string& cipherFile);
 
-    int gcmDecryptFile(const char* decryptedFile, const char* cipherFile);
+
+
+    // read fileName, decrypt it and write result to decryptedFile
+    int gcmDecryptFile(const std::string& decryptedFile, const std::string& cipherFile);
+
+    // read fileName, decrypt it and updated decryptedString
+    int gcmDecryptFiletoString(const std::string& fileName, std::string& decryptedString);
 
     // decrypt cipherString and place result into plainString
     std::string gcmDecryptString(const std::string& cipherString);
