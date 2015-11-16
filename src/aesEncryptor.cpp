@@ -11,7 +11,7 @@ aesEncryptor::aesEncryptor(const std::string& key):
 
 aesEncryptor::~aesEncryptor()
 {
-    delete _key;
+    delete[] _key;
 }
 
 //ciphertext format="IV|CIPHER|AUH_TAG"
