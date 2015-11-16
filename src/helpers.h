@@ -111,14 +111,23 @@ inline std::string simpleSHA256(const std::string& val)
 
   SHA256_CTX context;
   if(!SHA256_Init(&context))
+  {
+      delete[] input;
     return ret;
+  }
 
   if(!SHA256_Update(&context, input, val.length()))
+  {
+      delete[] input;
     return ret;
+  }
 
   unsigned char md[SHA256_DIGEST_LENGTH];
   if(!SHA256_Final(md, &context))
+  {
+      delete[] input;
     return ret;
+  }
 
   ret = convertCharToString(md, SHA256_DIGEST_LENGTH);
   delete[] input;
