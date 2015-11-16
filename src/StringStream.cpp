@@ -15,7 +15,7 @@ int StringStream::readBuf(unsigned char* buf, unsigned int size)
     {
         size = _string.size();
     }
-    strncpy((char*)buf, _string.c_str(), size);
+    memcpy(buf, _string.c_str(), size);
     _string.erase(0, size);
     return size;
 }
