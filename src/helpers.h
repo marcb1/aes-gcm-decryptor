@@ -73,9 +73,9 @@ inline unsigned char* convertStringToChar(const std::string& s)
   return ret;
 }
 
-inline std::string convertCharToString(unsigned char* c)
+inline std::string convertCharToString(unsigned char* c, unsigned int size)
 {
-  std::string ret(reinterpret_cast<char*>(c));
+  std::string ret(reinterpret_cast<char*>(c), size);
   return ret;
 }
 
@@ -120,8 +120,8 @@ inline std::string simpleSHA256(const std::string& val)
   if(!SHA256_Final(md, &context))
     return ret;
 
-  ret = convertCharToString(md);
-  delete input;
+  ret = convertCharToString(md, SHA256_DIGEST_LENGTH);
+  delete[] input;
 
   return ret;
 }

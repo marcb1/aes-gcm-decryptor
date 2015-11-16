@@ -22,5 +22,5 @@ public:
     std::string getString();
 
 private:
-    std::stringstream ss;
+    std::string _string;
 };
