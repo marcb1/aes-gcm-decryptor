@@ -88,6 +88,7 @@ int aesEncryptor::gcmEncrypt(IStream* plainStream, unsigned char *key_buf, IStre
         return -1;
     }
 
+    EVP_CIPHER_CTX_cleanup(&ctx); 
     return 0;
 }
 
@@ -127,6 +128,7 @@ int aesEncryptor::gcmDecrypt(IStream* cipherStream, unsigned char *key_buf, IStr
     if(ret != 1)
     {
         std::cerr << "Failed to initialize decryptor" << std::endl;
+        EVP_CIPHER_CTX_cleanup(&ctx); 
         return -1;
     }
 
@@ -137,6 +139,7 @@ int aesEncryptor::gcmDecrypt(IStream* cipherStream, unsigned char *key_buf, IStr
         if(bytes_read != std::min((size_t)BUF_SIZE, to_read))
         {
             std::cerr << "Couldn't read file" << std::endl;
+            EVP_CIPHER_CTX_cleanup(&ctx); 
             return -1;
         }
         to_read -= bytes_read;
@@ -145,6 +148,7 @@ int aesEncryptor::gcmDecrypt(IStream* cipherStream, unsigned char *key_buf, IStr
         if(ret != 1)
         {
             std::cerr << "Failed to decrypt" << std::endl;
+            EVP_CIPHER_CTX_cleanup(&ctx); 
             return -1;
         }
 
@@ -152,6 +156,7 @@ int aesEncryptor::gcmDecrypt(IStream* cipherStream, unsigned char *key_buf, IStr
         if(ret != bytes_decrypted)
         {
             std::cerr << "Couldn't write decrypted bytes" << std::endl;
+            EVP_CIPHER_CTX_cleanup(&ctx); 
             return -1;
         }
     }
@@ -160,6 +165,7 @@ int aesEncryptor::gcmDecrypt(IStream* cipherStream, unsigned char *key_buf, IStr
     if(ret != AES_BLOCK_SIZE)
     {
         std::cerr << "can't read auth tag" << std::endl;
+        EVP_CIPHER_CTX_cleanup(&ctx); 
         return -1;
     }
 
@@ -168,6 +174,7 @@ int aesEncryptor::gcmDecrypt(IStream* cipherStream, unsigned char *key_buf, IStr
     if(ret != 1)
     {
         std::cerr << "Failed to initialize set auth tag" << std::endl;
+        EVP_CIPHER_CTX_cleanup(&ctx); 
         return -1;
     }
 
@@ -175,15 +182,18 @@ int aesEncryptor::gcmDecrypt(IStream* cipherStream, unsigned char *key_buf, IStr
     if(ret != 1)
     {
         std::cerr << "Failed to finalize decryptor" << std::endl;
+        EVP_CIPHER_CTX_cleanup(&ctx); 
         return -1;
     }
 
     if(bytes_decrypted != 0)
     {
         std::cerr << "Decrypt finalization returned extra stuff" << std::endl;
+        EVP_CIPHER_CTX_cleanup(&ctx); 
         return -1;
     }
 
+    EVP_CIPHER_CTX_cleanup(&ctx); 
     return 0;
 }
 
