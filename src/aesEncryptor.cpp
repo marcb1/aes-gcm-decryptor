@@ -204,11 +204,12 @@ std::string aesEncryptor::gcmEncryptString(const std::string& plain)
 
     StringStream cipherStream;
     int ret = gcmEncrypt(&plainStream, _key, &cipherStream);
-    if(ret != 0)
+    std::string decryptedData;
+    if (ret == 0)
     {
-        std::cerr << "Encryption failed..." << std::endl;
+        decryptedData = cipherStream.getString();
     }
-    return cipherStream.getString();
+    return decryptedData;
 }
 
 int aesEncryptor::gcmEncryptFile(const std::string& plainFile, const std::string& cipherFile)
@@ -219,8 +220,7 @@ int aesEncryptor::gcmEncryptFile(const std::string& plainFile, const std::string
     FileStream outStream;
     outStream.openFile(cipherFile.c_str(), O_CREAT | O_WRONLY | O_TRUNC);
 
-    int ret = gcmEncrypt(&inStream, _key, &outStream);
-    return ret;
+    return gcmEncrypt(&inStream, _key, &outStream);
 }
 
 int aesEncryptor::gcmEncryptStringtoFile(const std::string& plainString, const std::string& cipherFile)
@@ -231,8 +231,7 @@ int aesEncryptor::gcmEncryptStringtoFile(const std::string& plainString, const s
     FileStream outStream;
     outStream.openFile(cipherFile.c_str(), O_CREAT | O_WRONLY | O_TRUNC);
 
-    int ret = gcmEncrypt(&inStream, _key, &outStream);
-    return ret;
+    return gcmEncrypt(&inStream, _key, &outStream);
 }
 
 int aesEncryptor::gcmDecryptFile(const std::string& plainFile, const std::string& cipherFile)
@@ -254,11 +253,12 @@ std::string aesEncryptor::gcmDecryptString(const std::string& cipherString)
     StringStream plainStream;
 
     int ret = gcmDecrypt(&cipherStream, _key, &plainStream);
-    if(ret != 0)
+    std::string decryptedData;
+    if (ret == 0)
     {
-        std::cerr << "Decryption failed..." << std::endl;
+        decryptedData = plainStream.getString();
     }
-    return plainStream.getString();
+    return decryptedData;
 }
 
 int aesEncryptor::gcmDecryptFiletoString(const std::string& fileName, std::string& decryptedString)
@@ -269,6 +269,9 @@ int aesEncryptor::gcmDecryptFiletoString(const std::string& fileName, std::strin
     cipherStream.openFile(fileName.c_str(), O_RDONLY);
 
     int ret = gcmDecrypt(&cipherStream, _key, &plainStream);
-    decryptedString = plainStream.getString();
+    if (ret == 0)
+    {
+        decryptedString = plainStream.getString();
+    }
     return ret;
 }
